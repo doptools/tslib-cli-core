@@ -1,0 +1,55 @@
+name: Publish
+
+on:
+  push:
+    tags:
+      - v*.*.*
+      - v*.*.*-*.*
+
+jobs:
+  # Push image to GitHub Packages.
+  # See also https://docs.docker.com/docker-hub/builds/
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+          registry-url: https://npm.pkg.github.com/
+          always-auth: true
+          scope: "doptools"
+
+      - name: Parse Version
+        id: version
+        uses: doptools/action-parse-semver@main
+        with:
+          version: "${{ github.ref }}"
+          versionRegex: '\/v(.*)$'
+
+      - name: Install
+        run: yarn
+
+      - name: Build
+        run: |
+          yarn version --no-git-tag-version --new-version ${{ steps.version.outputs.full }}
+          yarn run build
+
+      - name: Publish
+        env:
+          NODE_AUTH_TOKEN: ${{ github.token }}
+        run: yarn publish --access public
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            Generated Release ${{ github.ref }}
+          draft: false
+          prerelease: ${{ steps.version.outputs.isPrerelease }}
