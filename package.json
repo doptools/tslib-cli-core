@@ -1,6 +1,6 @@
 {
   "name": "@doptools/tslib-cli-core",
-  "version": "0.0.0",
+  "version": "0.0.0-dev.0",
   "description": "",
   "main": "dist/tslib-cli-core.umd.js",
   "module": "dist/tslib-cli-core.es5.js",
