@@ -28,15 +28,16 @@ export class JsonFile<TData = { [key: string]: unknown }>{
         }
     }
 
-    public async loadFile(): Promise<void> {
+    public async loadFile(): Promise<this> {
         if (!this.__hasFilePath) {
             throw new Error('Cannot load file with no path')
         }
         const json = await jsonc.read(this.getFilePath(), { stripComments: true }) as TData;
         this.__applyData(json, this);
+        return this;
     }
 
-    public loadFileFrom(file: string): Promise<void> {
+    public loadFileFrom(file: string): Promise<this> {
         this.setFilePath(file);
         return this.loadFile();
     }
