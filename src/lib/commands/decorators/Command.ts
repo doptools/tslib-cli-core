@@ -3,9 +3,8 @@ import { Command, flags } from '@oclif/command'
 import * as Parser from '@oclif/parser';
 import { AlphabetLowercase, AlphabetUppercase } from '@oclif/parser/lib/alphabet';
 import { Default, IBooleanFlag, IFlagBase, IOptionFlag } from '@oclif/parser/lib/flags';
+
 import { Class } from 'type-fest';
-
-
 export interface ICliCommandDescription {
     id?: string;
     hidden?: boolean;
@@ -14,11 +13,11 @@ export interface ICliCommandDescription {
     usage?: string | string[];
     examples?: string[];
 }
-
 export function CliCommand(desc: ICliCommandDescription): ClassDecorator {
     return (target: any) => {
         const Base = target as Class<Command & { run: () => PromiseLike<any> }>;
-
+        target[cmdArgKeys] ??= [];
+        target[cmdFlagKeys] ??= [];
         class Cmd extends Base {
             constructor(...arg: any[]) {
                 super(...arg);
@@ -27,7 +26,7 @@ export function CliCommand(desc: ICliCommandDescription): ClassDecorator {
                 for (const key of (target[cmdArgKeys])) {
                     self[key] = args[key];
                 }
-                for (const key of (target[cmdFlagKeys])) {
+                for (const key of target[cmdFlagKeys]) {
                     self[key] = (flags as {[key:string]: unknown})[key];
                 }
             }
@@ -76,10 +75,7 @@ export function CliArgument(...args: any[]): PropertyDecorator {
         const cfg = { ...desc };
         cfg.name ??= key.toString();
         const Cmd = target.constructor as Class<Command> & { [cmdArgKeys]: (string | symbol)[], args: ICliArgumentDescription[] };
-        const f: Partial<Parser.flags.IBooleanFlag<boolean>> = {
 
-        };
-        f.allowNo = true;
         Cmd.args ??= [];
         Cmd.args.push(cfg);
 
@@ -171,28 +167,26 @@ function createFlagDecorator<T extends IFlagBase<any, any> & { type: string }>(d
         const cfg = { ...desc };
         cfg.name ??= key.toString();
         cfg.char ??= cfg.name.charAt(0) as AlphabetLowercase | AlphabetUppercase;
-        const Cmd = target.constructor as Class<Command> & { [cmdFlagKeys]: (string | symbol)[], flags: IFlagBase<any, any>[] };
+        const Cmd = target.constructor as Class<Command> & { [cmdFlagKeys]: (string | symbol)[], flags: { [key: string]: IFlagBase<any, any> } };
         Cmd[cmdFlagKeys] ??= [];
         Cmd[cmdFlagKeys].push(key);
-        Cmd.flags ??= [];
+        Cmd.flags ??= {};
 
         switch (cfg.type) {
             case 'boolean':
-                Cmd.flags.push(flags.boolean(cfg as Partial<IBooleanFlag<any>>));
+                Cmd.flags[cfg.name!] = flags.boolean(cfg as Partial<IBooleanFlag<any>>);
                 break;
             case 'integer':
-                Cmd.flags.push(flags.integer(cfg as Partial<IOptionFlag<any>>));
+                Cmd.flags[cfg.name!] = flags.integer(cfg as Partial<IOptionFlag<any>>);
                 break;
             case 'help':
-                Cmd.flags.push(flags.help(cfg as Partial<IBooleanFlag<any>>));
+                Cmd.flags[cfg.name!] = flags.help(cfg as Partial<IBooleanFlag<any>>);
                 break;
             case 'string':
             default:
-                Cmd.flags.push(flags.string(cfg as Partial<IOptionFlag<any>>));
+                Cmd.flags[cfg.name!] = flags.string(cfg as Partial<IOptionFlag<any>>);
                 break;
         }
-
-
     }
 }
 

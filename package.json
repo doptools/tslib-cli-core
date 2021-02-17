@@ -2,9 +2,8 @@
   "name": "@doptools/tslib-cli-core",
   "version": "0.0.0-dev.0",
   "description": "",
-  "main": "dist/tslib-cli-core.umd.js",
-  "module": "dist/tslib-cli-core.es5.js",
-  "typings": "dist/types/tslib-cli-core.d.ts",
+  "main": "dist/lib/tslib-cli-core.js",
+  "types": "dist/types/tslib-cli-core.d.ts",
   "files": [
     "dist"
   ],
@@ -19,8 +18,8 @@
   "scripts": {
     "lint": "tslint  --project tsconfig.json -t codeFrame 'src/**/*.ts' 'test/**/*.ts'",
     "prebuild": "rimraf dist",
-    "build": "tsc --module commonjs && rollup -c rollup.config.ts && typedoc --out docs --theme minimal src",
-    "start": "rollup -c rollup.config.ts -w",
+    "build": "tsc --module commonjs && typedoc --out docs --theme minimal src",
+    "start": "tsc --module commonjs -w",
     "exec": "ts-node ./src/tslib-cli-core.ts"
   },
   "bugs": {
@@ -34,12 +33,6 @@
     "lodash.camelcase": "^4.3.0",
     "prettier": "^2.2.1",
     "rimraf": "^2.6.2",
-    "rollup": "^2.39.0",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-json": "^4.0.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-sourcemaps": "^0.6.3",
-    "rollup-plugin-typescript2": "^0.29.0",
     "ts-node": "^9.1.1",
     "tslint": "^6.1.3",
     "tslint-config-prettier": "^1.18.0",
@@ -49,7 +42,6 @@
   },
   "dependencies": {
     "@oclif/command": "^1.8.0",
-    "@oclif/config": "^1.17.0",
     "@oclif/parser": "^3.8.5",
     "jsonc": "^2.0.0",
     "rxjs": "^6.6.3",
