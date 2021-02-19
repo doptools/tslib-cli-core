@@ -24,13 +24,14 @@ export class SimpleFs {
         private readonly enforceRootDir: boolean = false
     ) { }
 
-    protected get root(): string {
-        return Path.normalize(process.cwd());
+    public get root(): string {
+        return Path.normalize(process.cwd() + '/');
     }
 
-    protected get cwd(): string {
-        return this._cwd;
+    public get cwd(): string {
+        return Path.relative(Path.normalize(process.cwd()), this._cwd) || '/';
     }
+
 
     public async read(path: string): Promise<Buffer | null> {
         path = this.resolve(path);
@@ -111,7 +112,11 @@ export class SimpleFs {
     }
 
     public exists(path: string): Promise<boolean> {
-        return Promise.resolve(existsSync(this.resolve(path)));
+        return Promise.resolve(this.existsSync(path));
+    }
+
+    private existsSync(path: string): boolean {
+        return existsSync(this.resolve(path));
     }
 
     public async list(path: string): Promise<string[]> {
@@ -119,43 +124,53 @@ export class SimpleFs {
         return (await readdir(this.resolve(path))).filter(_ => _ !== '.' && _ !== '..');
     }
 
+    public cd(path: string): void {
+        this.ensureExistsSync(path);
+        path = this.resolve(path);
+        this._cwd = path;
+    }
+
 
     protected buildPath(path: string): string {
-        if(Path.isAbsolute(path)){    
-            return Path.normalize(Path.join(this.root, path))
+        if (Path.isAbsolute(path)) {
+            const trueRoot = Path.normalize(process.cwd() + '/');
+            let target = Path.join(trueRoot, `./${path}`);
+            target = Path.relative(trueRoot, target);
+            return target;
         }
-        path = Path.normalize(Path.join(this.cwd, path));
+        path = Path.normalize(Path.join(this._cwd, path));
         return path;
 
     }
     protected resolve(path: string): string {
-        const p = this.buildPath(path);
-
-        const r = Path.join(this.root, p);
-        console.log('path: ', p);
-        console.log('  --> r       :', r);
-        if(p.startsWith('..')){
-            if(this.enforceRootDir || this.root === '/'){
-                throw new Error(`Path '${path}' is invalid.`);
+        let target = this.buildPath(path);
+        if (target.startsWith('..')) {
+            if (this.enforceRootDir || this.root === '/') {
+                throw new Error(`Path '${path}' is invalid. Resolves below root : '/${target}'`);
             }
         }
-        const rel = Path.relative(this.root, r);
-
-        console.log('  --> root    :', this.root);
-        console.log('  --> rel     :',  rel);
-        console.log('  --> resolved:', rel || this.root);
-        return rel || this.root;
+        target = Path.normalize(Path.join(this.root, target));
+        target = Path.relative(this.root, target);
+        return target || this.root;
     }
 
 
     protected async ensureExists(path: string): Promise<void> {
-        if (!await this.exists(path)) {
+        return Promise.resolve(this.ensureExistsSync(path));
+    }
+
+    private ensureExistsSync(path: string): void {
+        if (!this.existsSync(path)) {
             throw new Error(`${path} does not exist.`);
         }
     }
 
     protected async ensureNotExists(path: string): Promise<void> {
-        if (await this.exists(path)) {
+        return Promise.resolve(this.ensureNotExistsSync(path));
+    }
+
+    private ensureNotExistsSync(path: string): void {
+        if (this.existsSync(path)) {
             throw new Error(`${path} already exist.`);
         }
     }

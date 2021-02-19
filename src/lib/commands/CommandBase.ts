@@ -4,12 +4,16 @@ import { Observable } from 'rxjs';
 import { SchematicsSimpleFs } from '../files/simple-filesystem/SchematicsSimpleFs';
 import { SimpleFs } from '../files/simple-filesystem/SimpleFs';
 import { IRuleOptions, RuleRunner } from '../schematics/runner';
-
+import { PackageJson } from "type-fest";
 
 export abstract class CommandBase extends Command {
     protected fs: SimpleFs = new SimpleFs(true);
     protected readonly flags: { [key: string]: string | number | boolean | undefined } = {};
     protected readonly arguments: { [key: string]: string | number | boolean | undefined } = {};
+
+    public get packageJson(): Promise<PackageJson | null> {
+        return this.fs.readJson<PackageJson>('/package.json');
+    }
 }
 
 export abstract class SchematicsCommandBase extends CommandBase {
@@ -34,14 +38,11 @@ export abstract class SchematicsCommandBase extends CommandBase {
 
     public run(): PromiseLike<any> {
         const options = this.buildOptions();
-
         const r = this.runRule((tree: Tree, context: SchematicContext) => {
             (this.fs as SchematicsSimpleFs).tree = tree;
             return this.execute(tree, context, options);
-        });
+        }, options);
         (this.fs as SchematicsSimpleFs).tree = null;
-       // this.fs.list('asdf/a/../../../test-proj/');
-       // this.fs.list('somefoler/../../test-proj/');
         return r;
     }
 

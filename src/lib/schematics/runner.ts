@@ -179,7 +179,6 @@ export class SchematicRunner {
                     debug: false,
                     logger: this._logger,
                 }).toPromise();
-
                 if (nothingDone && this._options.mode === 'rw') {
                     this._logger.info(colors.gray('Nothing to be done.'));
                 }

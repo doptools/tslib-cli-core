@@ -74,8 +74,8 @@ export function CliCommand(desc: ICliCommandDescription): ClassDecorator {
                 super(...arg);
 
                 const parsed = this.parse(Cmd as any);
-                var args = parsed.args;
-                var flags = parsed.flags as { [key: string]: IFlagBase<any, any> };
+                const args = parsed.args;
+                const flags = parsed.flags as { [key: string]: IFlagBase<any, any> };
                 const self: any = this;
                 keys.arg.forEach((arg, key) => {
                     self[key] = args[arg.name!];
