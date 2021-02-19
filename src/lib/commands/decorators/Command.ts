@@ -1,10 +1,11 @@
-import { Command, flags } from '@oclif/command'
-
-import * as Parser from '@oclif/parser';
+import { Command, flags } from '@oclif/command';
 import { AlphabetLowercase, AlphabetUppercase } from '@oclif/parser/lib/alphabet';
 import { Default, IBooleanFlag, IFlagBase, IOptionFlag } from '@oclif/parser/lib/flags';
-
 import { Class } from 'type-fest';
+
+
+const propertyKeyField = Symbol.for('hiden property to store propKey');
+
 export interface ICliCommandDescription {
     id?: string;
     hidden?: boolean;
@@ -13,32 +14,86 @@ export interface ICliCommandDescription {
     usage?: string | string[];
     examples?: string[];
 }
-export function CliCommand(desc: ICliCommandDescription): ClassDecorator {
-    return (target: any) => {
-        const Base = target as Class<Command & { run: () => PromiseLike<any> }>;
-        target[cmdArgKeys] ??= [];
-        target[cmdFlagKeys] ??= [];
-        class Cmd extends Base {
-            constructor(...arg: any[]) {
-                super(...arg);
-                const { args, flags } = this.parse(target);
-                const self: any = this;
-                for (const key of (target[cmdArgKeys])) {
-                    self[key] = args[key];
-                }
-                for (const key of target[cmdFlagKeys]) {
-                    self[key] = (flags as {[key:string]: unknown})[key];
-                }
+
+type HasPropertyKeyField = { [propertyKeyField]: string | symbol };
+type KeyData = { arg: Map<string | symbol, IArgumentConfig & HasPropertyKeyField>, flag: Map<string | symbol, IFlagConfig<any, any> & HasPropertyKeyField> };
+
+
+type CmdClass = Class<Command & { run: () => PromiseLike<any> }> & {
+    args?: (IArgumentConfig & HasPropertyKeyField)[]
+    flags?: { [key: string]: (IFlagConfig<any, any> & HasPropertyKeyField) }
+};
+
+function gatherKeys(target: CmdClass): KeyData {
+    const data: KeyData = { arg: new Map(), flag: new Map() };
+    const parent = Object.getPrototypeOf(target);
+    if (parent && parent.name && parent !== Object) {
+        const pdata = gatherKeys(parent);
+        // args dont inherit
+        pdata.flag.forEach((v, k) => {
+            data.flag.set(k, v);
+        });
+    }
+
+    target.args?.forEach(arg => {
+        const pk = arg[propertyKeyField];
+        data.arg.set(pk, arg);
+    });
+    if (target.flags) {
+        for (const key in target.flags) {
+            if (Object.prototype.hasOwnProperty.call(target.flags, key)) {
+                const flag = target.flags[key];
+                const pk = flag[propertyKeyField];
+                data.flag.set(pk, flag);
             }
         }
+    }
 
-        const newClass = Object.assign(Cmd, desc, { args: target.args, flags: target.flags }) as any;
-        return newClass;
+    return data;
+}
+
+
+export function CliCommand(desc: ICliCommandDescription): ClassDecorator {
+    return (target: any) => {
+
+        const keys = gatherKeys(target);
+        const args = Array.from(keys.arg.values());
+        const flags = Object.fromEntries(keys.flag.entries());
+
+        const Base = target as Class<Command & { run: () => PromiseLike<any> }>;
+        class Cmd extends Base {
+            public static args = args;
+            public static flags = flags;
+            public static aliases = desc.aliases;
+            public static description = desc.description;
+            public static examples = desc.examples;
+            public static id = desc.id;
+            public static usage = desc.usage;
+
+            constructor(...arg: any[]) {
+                super(...arg);
+
+                const parsed = this.parse(Cmd as any);
+                var args = parsed.args;
+                var flags = parsed.flags as { [key: string]: IFlagBase<any, any> };
+                const self: any = this;
+                keys.arg.forEach((arg, key) => {
+                    self[key] = args[arg.name!];
+                });
+                keys.flag.forEach((flag, key) => {
+                    self[key] = flags[flag.name!];
+                });
+
+                self.arguments = args;
+                self.flags = flags;
+            }
+        }
+        return Cmd as any;
     };
 }
 
 
-export interface ICliArgumentDescription {
+export interface IArgumentConfig {
     name?: string;
     description?: string;
     required?: boolean;
@@ -48,16 +103,13 @@ export interface ICliArgumentDescription {
     parse?: (input: string) => string | number | undefined,
 }
 
-const cmdArgKeys = Symbol.for('registered command arguments');
-const cmdFlagKeys = Symbol.for('registered command flags');
-
-export function CliArgument(): PropertyDecorator;
-export function CliArgument(desc: ICliArgumentDescription): PropertyDecorator;
-export function CliArgument(required: boolean): PropertyDecorator;
-export function CliArgument(name: string): PropertyDecorator;
-export function CliArgument(name: string, required: boolean): PropertyDecorator;
-export function CliArgument(...args: any[]): PropertyDecorator {
-    let desc: ICliArgumentDescription = {};
+export function Argument(): PropertyDecorator;
+export function Argument(desc: IArgumentConfig): PropertyDecorator;
+export function Argument(required: boolean): PropertyDecorator;
+export function Argument(name: string): PropertyDecorator;
+export function Argument(name: string, required: boolean): PropertyDecorator;
+export function Argument(...args: any[]): PropertyDecorator {
+    let desc: IArgumentConfig = {};
     if (args.length === 1) {
         if (typeof args[0] === 'boolean') {
             desc.required = args[0];
@@ -72,57 +124,16 @@ export function CliArgument(...args: any[]): PropertyDecorator {
     }
 
     return (target, key) => {
-        const cfg = { ...desc };
+        const cfg = { ...desc, [propertyKeyField]: key };
         cfg.name ??= key.toString();
-        const Cmd = target.constructor as Class<Command> & { [cmdArgKeys]: (string | symbol)[], args: ICliArgumentDescription[] };
-
+        const Cmd = target.constructor as Class<Command> & { args: IArgumentConfig[] };
         Cmd.args ??= [];
         Cmd.args.push(cfg);
-
-        Cmd[cmdArgKeys] ??= [];
-        Cmd[cmdArgKeys].push(key);
     };
 }
 
-/*
-export interface ICliFlagDescription {
-    type: 'boolean' | 'option';
-    name: string;
-    required?: boolean;
-    char?: string;
-    hidden?: boolean;
-    description?: string;
-    helpLabel?: string;
-    allowNo?: boolean;
-}
 
-export interface ICliBooleanFlagDescription extends ICliFlagDescription {
-    type: 'boolean';
-}
-
-export interface ICliOptionFlagDescription extends ICliFlagDescription {
-    type: 'option';
-    helpValue?: string;
-    default?: string;
-    options?: string[];
-}
-*/
-/*
-export interface ICliFlagDescription {
-    name?: string;
-    required?: boolean;
-    char?: string;
-    hidden?: boolean;
-    description?: string;
-    helpLabel?: string;
-    allowNo?: boolean;
-}
-export interface ICliBooleanFlagDescription extends ICliFlagDescription {
-    
-}
-*/
-
-export interface ICliFlag<TFlag, TInput> {
+export interface IFlagConfig<TFlag, TInput> {
     name?: string;
     char?: AlphabetLowercase | AlphabetUppercase;
     description?: string;
@@ -135,13 +146,13 @@ export interface ICliFlag<TFlag, TInput> {
     parse?: (input: TInput, context: any) => TFlag;
 }
 
-export interface ICliFlagBoolean<TInput = string> extends ICliFlag<boolean, TInput> {
+export interface IBooleanFlagConfig<TInput = string> extends IFlagConfig<boolean, TInput> {
     allowNo?: boolean;
     default?: Default<boolean>;
 }
 
 
-export interface ICliFlagOptions<TFlag, TInput> extends ICliFlag<TFlag, TInput> {
+export interface IOptionsFlagConfig<TFlag, TInput> extends IFlagConfig<TFlag, TInput> {
     helpValue?: string;
     default?: Default<TFlag | undefined>;
     multiple?: boolean;
@@ -149,15 +160,15 @@ export interface ICliFlagOptions<TFlag, TInput> extends ICliFlag<TFlag, TInput> 
     options?: TInput[];
 }
 
-export interface ICliFlagString<TInput = string> extends ICliFlagOptions<string, TInput> {
+export interface IStringFlagConfig<TInput = string> extends IOptionsFlagConfig<string, TInput> {
 
 }
 
-export interface ICliFlagInteger<TInput = string> extends ICliFlagOptions<number, TInput> {
+export interface IIntegerFlagConfig<TInput = string> extends IOptionsFlagConfig<number, TInput> {
 
 }
 
-export interface ICliFlagHelp<TInput = string> extends ICliFlagBoolean<TInput> {
+export interface IHelpFlagConfig<TInput = string> extends IBooleanFlagConfig<TInput> {
 
 }
 
@@ -167,47 +178,47 @@ function createFlagDecorator<T extends IFlagBase<any, any> & { type: string }>(d
         const cfg = { ...desc };
         cfg.name ??= key.toString();
         cfg.char ??= cfg.name.charAt(0) as AlphabetLowercase | AlphabetUppercase;
-        const Cmd = target.constructor as Class<Command> & { [cmdFlagKeys]: (string | symbol)[], flags: { [key: string]: IFlagBase<any, any> } };
-        Cmd[cmdFlagKeys] ??= [];
-        Cmd[cmdFlagKeys].push(key);
+        const Cmd = target.constructor as Class<Command> & { flags: { [key: string]: IFlagBase<any, any> } };
         Cmd.flags ??= {};
 
+        let config: IFlagBase<any, any>;
         switch (cfg.type) {
             case 'boolean':
-                Cmd.flags[cfg.name!] = flags.boolean(cfg as Partial<IBooleanFlag<any>>);
+                config = flags.boolean(cfg as Partial<IBooleanFlag<any>>);
                 break;
             case 'integer':
-                Cmd.flags[cfg.name!] = flags.integer(cfg as Partial<IOptionFlag<any>>);
+                config = flags.integer(cfg as Partial<IOptionFlag<any>>);
                 break;
             case 'help':
-                Cmd.flags[cfg.name!] = flags.help(cfg as Partial<IBooleanFlag<any>>);
+                config = flags.help(cfg as Partial<IBooleanFlag<any>>);
                 break;
             case 'string':
             default:
-                Cmd.flags[cfg.name!] = flags.string(cfg as Partial<IOptionFlag<any>>);
+                config = flags.string(cfg as Partial<IOptionFlag<any>>);
                 break;
         }
+        Cmd.flags[cfg.name!] = { ...config, [propertyKeyField]: key } as IFlagBase<any, any>;
     }
 }
 
 
-function createFlagAnnotation(type: string, config: ICliFlag<any, any>): PropertyDecorator {
+function createFlagAnnotation(type: string, config: IFlagConfig<any, any>): PropertyDecorator {
     return createFlagDecorator(Object.assign({}, config, { type }));
 }
 
 
-export function FlagBoolean(desc?: ICliFlagBoolean): PropertyDecorator {
+export function BooleanFlag(desc?: IBooleanFlagConfig): PropertyDecorator {
     return createFlagAnnotation('boolean', desc ?? {});
 }
 
-export function FlagString(desc?: ICliFlagBoolean): PropertyDecorator {
+export function StringFlag(desc?: IBooleanFlagConfig): PropertyDecorator {
     return createFlagAnnotation('string', desc ?? {});
 }
 
-export function FlagHelp(desc?: ICliFlagHelp): PropertyDecorator {
+export function HelpFlag(desc?: IHelpFlagConfig): PropertyDecorator {
     return createFlagAnnotation('help', desc ?? {});
 }
 
-export function FlagInteger(desc?: ICliFlagInteger): PropertyDecorator {
+export function IntegerFlag(desc?: IIntegerFlagConfig): PropertyDecorator {
     return createFlagAnnotation('integer', desc ?? {});
 }

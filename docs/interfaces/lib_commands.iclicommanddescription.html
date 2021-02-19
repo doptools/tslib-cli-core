@@ -2682,8 +2682,17 @@ img {
 </header>
 <nav class="tsd-navigation secondary">
 	<ul>
+		<li class=" tsd-kind-class tsd-parent-kind-module">
+			<a href="../classes/lib_commands.commandbase.html" class="tsd-kind-icon">Command<wbr>Base</a>
+		</li>
+		<li class=" tsd-kind-class tsd-parent-kind-module">
+			<a href="../classes/lib_commands.schematicscommandbase.html" class="tsd-kind-icon">Schematics<wbr>Command<wbr>Base</a>
+		</li>
 		<li class=" tsd-kind-interface tsd-parent-kind-module">
-			<a href="lib_commands.icliargumentdescription.html" class="tsd-kind-icon">ICli<wbr>Argument<wbr>Description</a>
+			<a href="lib_commands.iargumentconfig.html" class="tsd-kind-icon">IArgument<wbr>Config</a>
+		</li>
+		<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+			<a href="lib_commands.ibooleanflagconfig.html" class="tsd-kind-icon">IBoolean<wbr>Flag<wbr>Config</a>
 		</li>
 		<li class="current tsd-kind-interface tsd-parent-kind-module">
 			<a href="lib_commands.iclicommanddescription.html" class="tsd-kind-icon">ICli<wbr>Command<wbr>Description</a>
@@ -2709,40 +2718,37 @@ img {
 			</ul>
 		</li>
 		<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-			<a href="lib_commands.icliflag.html" class="tsd-kind-icon">ICli<wbr>Flag</a>
+			<a href="lib_commands.iflagconfig.html" class="tsd-kind-icon">IFlag<wbr>Config</a>
 		</li>
 		<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-			<a href="lib_commands.icliflagboolean.html" class="tsd-kind-icon">ICli<wbr>Flag<wbr>Boolean</a>
+			<a href="lib_commands.ihelpflagconfig.html" class="tsd-kind-icon">IHelp<wbr>Flag<wbr>Config</a>
 		</li>
 		<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-			<a href="lib_commands.icliflaghelp.html" class="tsd-kind-icon">ICli<wbr>Flag<wbr>Help</a>
+			<a href="lib_commands.iintegerflagconfig.html" class="tsd-kind-icon">IInteger<wbr>Flag<wbr>Config</a>
 		</li>
 		<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-			<a href="lib_commands.icliflaginteger.html" class="tsd-kind-icon">ICli<wbr>Flag<wbr>Integer</a>
+			<a href="lib_commands.ioptionsflagconfig.html" class="tsd-kind-icon">IOptions<wbr>Flag<wbr>Config</a>
 		</li>
 		<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-			<a href="lib_commands.icliflagoptions.html" class="tsd-kind-icon">ICli<wbr>Flag<wbr>Options</a>
-		</li>
-		<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-			<a href="lib_commands.icliflagstring.html" class="tsd-kind-icon">ICli<wbr>Flag<wbr>String</a>
+			<a href="lib_commands.istringflagconfig.html" class="tsd-kind-icon">IString<wbr>Flag<wbr>Config</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
-			<a href="../modules/lib_commands.html#cliargument" class="tsd-kind-icon">Cli<wbr>Argument</a>
+			<a href="../modules/lib_commands.html#argument" class="tsd-kind-icon">Argument</a>
+		</li>
+		<li class=" tsd-kind-function tsd-parent-kind-module">
+			<a href="../modules/lib_commands.html#booleanflag" class="tsd-kind-icon">Boolean<wbr>Flag</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
 			<a href="../modules/lib_commands.html#clicommand" class="tsd-kind-icon">Cli<wbr>Command</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
-			<a href="../modules/lib_commands.html#flagboolean" class="tsd-kind-icon">Flag<wbr>Boolean</a>
+			<a href="../modules/lib_commands.html#helpflag" class="tsd-kind-icon">Help<wbr>Flag</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
-			<a href="../modules/lib_commands.html#flaghelp" class="tsd-kind-icon">Flag<wbr>Help</a>
+			<a href="../modules/lib_commands.html#integerflag" class="tsd-kind-icon">Integer<wbr>Flag</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
-			<a href="../modules/lib_commands.html#flaginteger" class="tsd-kind-icon">Flag<wbr>Integer</a>
-		</li>
-		<li class=" tsd-kind-function tsd-parent-kind-module">
-			<a href="../modules/lib_commands.html#flagstring" class="tsd-kind-icon">Flag<wbr>String</a>
+			<a href="../modules/lib_commands.html#stringflag" class="tsd-kind-icon">String<wbr>Flag</a>
 		</li>
 	</ul>
 </nav>
@@ -2782,7 +2788,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">aliases<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/doptools/tslib-cli-core/blob/da9a16d/src/lib/commands/decorators/Command.ts#L11">src/lib/commands/decorators/Command.ts:11</a></li>
+						<li>Defined in <a href="https://github.com/doptools/tslib-cli-core/blob/9ebb78c/src/lib/commands/decorators/Command.ts#L12">src/lib/commands/decorators/Command.ts:12</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -2792,7 +2798,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">description<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/doptools/tslib-cli-core/blob/da9a16d/src/lib/commands/decorators/Command.ts#L12">src/lib/commands/decorators/Command.ts:12</a></li>
+						<li>Defined in <a href="https://github.com/doptools/tslib-cli-core/blob/9ebb78c/src/lib/commands/decorators/Command.ts#L13">src/lib/commands/decorators/Command.ts:13</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -2802,7 +2808,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">examples<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/doptools/tslib-cli-core/blob/da9a16d/src/lib/commands/decorators/Command.ts#L14">src/lib/commands/decorators/Command.ts:14</a></li>
+						<li>Defined in <a href="https://github.com/doptools/tslib-cli-core/blob/9ebb78c/src/lib/commands/decorators/Command.ts#L15">src/lib/commands/decorators/Command.ts:15</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -2812,7 +2818,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">hidden<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/doptools/tslib-cli-core/blob/da9a16d/src/lib/commands/decorators/Command.ts#L10">src/lib/commands/decorators/Command.ts:10</a></li>
+						<li>Defined in <a href="https://github.com/doptools/tslib-cli-core/blob/9ebb78c/src/lib/commands/decorators/Command.ts#L11">src/lib/commands/decorators/Command.ts:11</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -2822,7 +2828,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/doptools/tslib-cli-core/blob/da9a16d/src/lib/commands/decorators/Command.ts#L9">src/lib/commands/decorators/Command.ts:9</a></li>
+						<li>Defined in <a href="https://github.com/doptools/tslib-cli-core/blob/9ebb78c/src/lib/commands/decorators/Command.ts#L10">src/lib/commands/decorators/Command.ts:10</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -2832,7 +2838,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">usage<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/doptools/tslib-cli-core/blob/da9a16d/src/lib/commands/decorators/Command.ts#L13">src/lib/commands/decorators/Command.ts:13</a></li>
+						<li>Defined in <a href="https://github.com/doptools/tslib-cli-core/blob/9ebb78c/src/lib/commands/decorators/Command.ts#L14">src/lib/commands/decorators/Command.ts:14</a></li>
 					</ul>
 				</aside>
 			</section>

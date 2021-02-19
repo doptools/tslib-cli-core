@@ -1,0 +1,11 @@
+{
+  "$schema": "../../../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "run-rules": {
+      "description": "runs a series of rules",
+      "hidden": true,
+      "factory": "./rule-runner-schematic",
+      "schema": "./rule-runner-schematic/schema.json"
+    }
+  }
+}
