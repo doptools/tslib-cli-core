@@ -211,7 +211,7 @@ export class Yarn {
      * @link https://yarnpkg.com/cli/remove
      */
     public static remove(packages: string | string[], options: IYarnRemoveOptions = {}): number {
-        return Shell.exec(cmd('install', Array.isArray(packages) ? packages : [packages], {
+        return Shell.exec(cmd('remove', Array.isArray(packages) ? packages : [packages], {
             'all': options.all ?? false,
         }), { cwd: options.cwd });
     }
