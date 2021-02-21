@@ -2709,6 +2709,9 @@ img {
 				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-external">
 					<a href="tslib_cli_core.commandbase.html#id" class="tsd-kind-icon">id</a>
 				</li>
+				<li class=" tsd-kind-property tsd-parent-kind-class">
+					<a href="tslib_cli_core.commandbase.html#verbose" class="tsd-kind-icon">verbose</a>
+				</li>
 				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
 					<a href="tslib_cli_core.commandbase.html#_base" class="tsd-kind-icon">_base</a>
 				</li>
@@ -2831,6 +2834,9 @@ img {
 		<li class=" tsd-kind-class tsd-parent-kind-module">
 			<a href="tslib_cli_core.tsconfigjsonfile.html" class="tsd-kind-icon">Ts<wbr>Config<wbr>Json<wbr>File</a>
 		</li>
+		<li class=" tsd-kind-class tsd-parent-kind-module">
+			<a href="tslib_cli_core.yarn.html" class="tsd-kind-icon">Yarn</a>
+		</li>
 		<li class=" tsd-kind-interface tsd-parent-kind-module">
 			<a href="../interfaces/tslib_cli_core.iargumentconfig.html" class="tsd-kind-icon">IArgument<wbr>Config</a>
 		</li>
@@ -2860,6 +2866,21 @@ img {
 		</li>
 		<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
 			<a href="../interfaces/tslib_cli_core.istringflagconfig.html" class="tsd-kind-icon">IString<wbr>Flag<wbr>Config</a>
+		</li>
+		<li class=" tsd-kind-interface tsd-parent-kind-module">
+			<a href="../interfaces/tslib_cli_core.iyarnaddoptions.html" class="tsd-kind-icon">IYarn<wbr>Add<wbr>Options</a>
+		</li>
+		<li class=" tsd-kind-interface tsd-parent-kind-module">
+			<a href="../interfaces/tslib_cli_core.iyarninstalloptions.html" class="tsd-kind-icon">IYarn<wbr>Install<wbr>Options</a>
+		</li>
+		<li class=" tsd-kind-interface tsd-parent-kind-module">
+			<a href="../interfaces/tslib_cli_core.iyarnoptions.html" class="tsd-kind-icon">IYarn<wbr>Options</a>
+		</li>
+		<li class=" tsd-kind-interface tsd-parent-kind-module">
+			<a href="../interfaces/tslib_cli_core.iyarnremoveoptions.html" class="tsd-kind-icon">IYarn<wbr>Remove<wbr>Options</a>
+		</li>
+		<li class=" tsd-kind-interface tsd-parent-kind-module">
+			<a href="../interfaces/tslib_cli_core.iyarnrunoptions.html" class="tsd-kind-icon">IYarn<wbr>Run<wbr>Options</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
 			<a href="../modules/tslib_cli_core.html#argument" class="tsd-kind-icon">Argument</a>
@@ -2919,6 +2940,7 @@ img {
 							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="tslib_cli_core.commandbase.html#flags" class="tsd-kind-icon">flags</a></li>
 							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="tslib_cli_core.commandbase.html#fs" class="tsd-kind-icon">fs</a></li>
 							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="tslib_cli_core.commandbase.html#id" class="tsd-kind-icon">id</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-class"><a href="tslib_cli_core.commandbase.html#verbose" class="tsd-kind-icon">verbose</a></li>
 							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="tslib_cli_core.commandbase.html#_base" class="tsd-kind-icon">_base</a></li>
 							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="tslib_cli_core.commandbase.html#aliases" class="tsd-kind-icon">aliases</a></li>
 							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="tslib_cli_core.commandbase.html#args" class="tsd-kind-icon">args</a></li>
@@ -3002,7 +3024,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">arguments<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol"> = ...</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/doptools/tslib-cli-core/blob/2fd988b/src/lib/commands/CommandBase.ts#L12">src/lib/commands/CommandBase.ts:12</a></li>
+						<li>Defined in <a href="https://github.com/doptools/tslib-cli-core/blob/eb2c0cf/src/lib/commands/CommandBase.ts#L9">src/lib/commands/CommandBase.ts:9</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-type-declaration">
@@ -3071,7 +3093,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">flags<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol"> = ...</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/doptools/tslib-cli-core/blob/2fd988b/src/lib/commands/CommandBase.ts#L11">src/lib/commands/CommandBase.ts:11</a></li>
+						<li>Defined in <a href="https://github.com/doptools/tslib-cli-core/blob/eb2c0cf/src/lib/commands/CommandBase.ts#L8">src/lib/commands/CommandBase.ts:8</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-type-declaration">
@@ -3089,7 +3111,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">fs<span class="tsd-signature-symbol">:</span> <a href="lib_files_simple_filesystem_simplefs.simplefs.html" class="tsd-signature-type" data-tsd-kind="Class">SimpleFs</a><span class="tsd-signature-symbol"> = ...</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/doptools/tslib-cli-core/blob/2fd988b/src/lib/commands/CommandBase.ts#L10">src/lib/commands/CommandBase.ts:10</a></li>
+						<li>Defined in <a href="https://github.com/doptools/tslib-cli-core/blob/eb2c0cf/src/lib/commands/CommandBase.ts#L7">src/lib/commands/CommandBase.ts:7</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -3100,6 +3122,16 @@ img {
 				<aside class="tsd-sources">
 					<ul>
 						<li>Defined in node_modules/@oclif/command/lib/command.d.ts:46</li>
+					</ul>
+				</aside>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<a name="verbose" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> verbose</h3>
+				<div class="tsd-signature tsd-kind-icon">verbose<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></div>
+				<aside class="tsd-sources">
+					<ul>
+						<li>Defined in <a href="https://github.com/doptools/tslib-cli-core/blob/eb2c0cf/src/lib/commands/CommandBase.ts#L14">src/lib/commands/CommandBase.ts:14</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -3384,7 +3416,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/doptools/tslib-cli-core/blob/2fd988b/src/lib/commands/CommandBase.ts#L14">src/lib/commands/CommandBase.ts:14</a></li>
+								<li>Defined in <a href="https://github.com/doptools/tslib-cli-core/blob/eb2c0cf/src/lib/commands/CommandBase.ts#L16">src/lib/commands/CommandBase.ts:16</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">PackageJson</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -3713,6 +3745,7 @@ img {
 						<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
 						<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
 						<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+						<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
 					</ul>
 					<ul class="tsd-legend">
 						<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
