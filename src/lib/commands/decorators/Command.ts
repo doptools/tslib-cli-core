@@ -67,6 +67,7 @@ export function CliCommand(desc: ICliCommandDescription): ClassDecorator {
             public static aliases = desc.aliases;
             public static description = desc.description;
             public static examples = desc.examples;
+            public static hidden = desc.hidden;
             public static id = desc.id;
             public static usage = desc.usage;
 
